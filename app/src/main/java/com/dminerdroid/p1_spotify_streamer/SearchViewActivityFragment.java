@@ -38,6 +38,7 @@ import retrofit.client.Response;
  */
 public class SearchViewActivityFragment extends Fragment implements AdapterView.OnItemClickListener{
     public static final String ARTIST_ID = "ArtistId";
+    public static final String ARTIST_NAME = "artistName";
     View mRootView;
     ListView lv;
     ArtistAdapter adapter;
@@ -99,6 +100,7 @@ public class SearchViewActivityFragment extends Fragment implements AdapterView.
 
         Intent intent= new Intent(getActivity(),TracksActivity.class);
         intent.putExtra(ARTIST_ID,artist.id);
+        intent.putExtra(ARTIST_NAME,artist.name);
         startActivity(intent);
     }
     TextView.OnEditorActionListener searcher =new TextView.OnEditorActionListener() {

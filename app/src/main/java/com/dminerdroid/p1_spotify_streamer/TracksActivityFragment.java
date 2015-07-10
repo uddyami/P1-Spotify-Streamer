@@ -34,12 +34,15 @@ public class TracksActivityFragment extends Fragment {
 
         mRootView= inflater.inflate(R.layout.fragment_tracks, container, false);
         lv=(ListView)mRootView.findViewById(R.id.listView_tracks);
-        adapter = new TracksAdapter(getActivity());
+        if(adapter!=null)
         lv.setAdapter(adapter);
         //save data here
-        Bundle arguments = getArguments();
-        if (arguments != null) {
-            loadTracks(arguments.getString(SearchViewActivityFragment.ARTIST_ID));
+        if(savedInstanceState==null) {
+            Bundle arguments = getArguments();
+            if (arguments != null) {
+                loadTracks(arguments.getString(SearchViewActivityFragment.ARTIST_ID));
+            }
+            setRetainInstance(true);
         }
         return mRootView;
     }
@@ -57,7 +60,7 @@ public class TracksActivityFragment extends Fragment {
             @Override
             public void success(Tracks tracks, Response response) {
                 if(!tracks.tracks.isEmpty()) {
-                    TracksAdapter adapter = new TracksAdapter(getActivity());
+                     adapter = new TracksAdapter(getActivity());
                     adapter.setmData(tracks);
                     lv.setAdapter(adapter);
                     adapter.notifyDataSetInvalidated();

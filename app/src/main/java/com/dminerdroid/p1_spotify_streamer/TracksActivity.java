@@ -18,6 +18,7 @@ public class TracksActivity extends AppCompatActivity {
             fragment.setArguments(arguments);
             getSupportFragmentManager().beginTransaction().add(R.id.track_container,fragment).commit();
         }
+        setTitle("Top Tracks");
     }
 
 

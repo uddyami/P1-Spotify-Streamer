@@ -1,5 +1,6 @@
 package com.dminerdroid.p1_spotify_streamer;
 
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.v4.app.Fragment;
@@ -11,6 +12,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.EditorInfo;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Adapter;
 import android.widget.AdapterView;
 import android.widget.EditText;
@@ -48,29 +50,19 @@ public class SearchViewActivityFragment extends Fragment implements AdapterView.
                              Bundle savedInstanceState) {
         mRootView= inflater.inflate(R.layout.fragment_search_view, container, false);
         lv=(ListView)mRootView.findViewById(R.id.listView_search);
-        adapter = new ArtistAdapter(getActivity());
+        if(adapter!=null)
         lv.setAdapter(adapter);
         lv.setOnItemClickListener(this);
-        searchText=(EditText)mRootView.findViewById(R.id.et_search_artist);
-        searchText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
-            @Override
-            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
-                if(actionId== EditorInfo.IME_ACTION_SEARCH || actionId ==EditorInfo.IME_FLAG_NO_ENTER_ACTION){
-                    callSearch( v.getText().toString());
-                    return true;
-                }
 
-                return false;
-            }
-        });
+        if(savedInstanceState==null){
+            setRetainInstance(true);
+        }
+        searchText=(EditText)mRootView.findViewById(R.id.et_search_artist);
+        searchText.setOnEditorActionListener(searcher);
+
         return mRootView;
     }
 
-    @Override
-    public void onResume(){
-        super.onResume();
-
-    }
 
     private void callSearch(String s) {
         SpotifyApi api = new SpotifyApi();
@@ -81,8 +73,11 @@ public class SearchViewActivityFragment extends Fragment implements AdapterView.
 
                 if(response.getStatus()==200){
                     if(artistsPager!=null && artistsPager.artists.total>0) {
+                        adapter = new ArtistAdapter(getActivity());
                         adapter.setmData(artistsPager);
                         adapter.notifyDataSetInvalidated();
+                        lv.setAdapter(adapter);
+
                     }else
                     Toast.makeText( getActivity(),R.string.artist_not_found,Toast.LENGTH_SHORT).show();
 
@@ -105,7 +100,18 @@ public class SearchViewActivityFragment extends Fragment implements AdapterView.
         Intent intent= new Intent(getActivity(),TracksActivity.class);
         intent.putExtra(ARTIST_ID,artist.id);
         startActivity(intent);
-
-
     }
+    TextView.OnEditorActionListener searcher =new TextView.OnEditorActionListener() {
+        @Override
+        public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+            if(actionId== EditorInfo.IME_ACTION_SEARCH || actionId ==EditorInfo.IME_FLAG_NO_ENTER_ACTION){
+                callSearch(v.getText().toString());
+                InputMethodManager imm = (InputMethodManager)getActivity().getSystemService(Context.INPUT_METHOD_SERVICE);
+                imm.hideSoftInputFromWindow(v.getWindowToken(), 0);
+                return true;
+            }
+
+            return false;
+        }
+    };
 }

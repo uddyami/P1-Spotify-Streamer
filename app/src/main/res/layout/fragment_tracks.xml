@@ -11,6 +11,6 @@
         android:layout_height="wrap_content"
         android:id="@+id/listView_tracks"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp" />
+       />
 
 </RelativeLayout>

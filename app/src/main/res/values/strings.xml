@@ -5,4 +5,6 @@
     <string name="artist_not_found">Artist is not Found</string>
     <string name="tracks_not_found">Tracks not Found</string>
     <string name="title_activity_tracks">TracksActivity</string>
+    <string name="searchHint">Search the name of artist</string>
+    <integer name="actionId">1234</integer>
 </resources>

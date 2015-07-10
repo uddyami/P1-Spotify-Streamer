@@ -30,7 +30,7 @@ Context mContext;
     }
     @Override
     public int getCount() {
-        if(mData!=null) return mData.artists.total;
+        if(mData!=null) return mData.artists.limit;
         return 0;
     }
 

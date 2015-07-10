@@ -11,6 +11,13 @@ public class TracksActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_tracks);
+        if(savedInstanceState==null){
+            Bundle arguments= new Bundle();
+            arguments.putString(SearchViewActivityFragment.ARTIST_ID,getIntent().getStringExtra(SearchViewActivityFragment.ARTIST_ID));
+            TracksActivityFragment fragment= new TracksActivityFragment();
+            fragment.setArguments(arguments);
+            getSupportFragmentManager().beginTransaction().add(R.id.track_container,fragment).commit();
+        }
     }
 
 
